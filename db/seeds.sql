@@ -1,4 +1,4 @@
-INSERT INTO department (depar_name)
+INSERT INTO department (dept_name)
 VALUES
 ('Head Honchos'),
 ('Sales People'),
@@ -21,9 +21,9 @@ VALUES
 INSERT INTO employee (first_name, last_name, job_id, manager_id)
 VALUES
 ('Billy', "Bob Joe", 1, NULL),
-('Robert', "De Niro", 2, 1),
-('Heisenburg', "Walt", 3, 2),
-('James', "Mcgill", 4, NULL),
-('Frodo', "Ringbearer", 5, NULL),
-('Scruffy', "The Janitor", 6, NULL),
-('Leonardo', "DiCaprio", 7, NULL);
+-- ('Robert', "De Niro", 2, 1),
+-- ('Heisenburg', "Walt", 3, 2),
+-- ('James', "Mcgill", 4, NULL),
+-- ('Frodo', "Ringbearer", 5, NULL),
+-- ('Scruffy', "The Janitor", 6, NULL),
+-- ('Leonardo', "DiCaprio", 7, NULL);
