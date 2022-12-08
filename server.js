@@ -1,25 +1,27 @@
 const mysql    = require('mysql2');
 const inquirer = require('inquirer');
 
+// This guy just creates a connection
 const db = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
-        password: 'bB78541254$',
+        password: '',
         database: 'employees_db'
-    }
+    },
+    console.log('Hello from the employee database!')
 );
 
+// This function just makes sure that mysql created a connection and then starts the user with what they need from the database
 db.connect(err => {
     if(err){
         throw err;
     }
-    
-    console.log('Hello from the employee database!');
     start();
 });
 
 const start = () => {
+    // We use inquirer to ask questions to the user seeing what they need to have us do
     inquirer.prompt({
         message: 'Hello Head Honcho! What do you need done?',
         name: 'menu',
@@ -35,8 +37,9 @@ const start = () => {
             'End Session'
         ],
     })
-    .then(response => {
-            switch (response.menu){
+    // After we use a switch statment with their response which sends them to a function depending on their response
+    .then(res => {
+            switch (res.menu){
                 case 'View all departments':
                     viewDepartment();
                     break;
@@ -92,8 +95,10 @@ const viewJobs = () => {
     });
 };
 
+// This function allows us to view employees' first and last name, their department number, salary and manager id
+// We also combine the tables to get their roles and what department they are from
 const viewEmployees = () => {
-    db.query('SELECT employee.id, first_name, last_name, title, salary, dept_name, manager_id FROM ((department JOIN roles ON department.id = roles.department_id) JOIN employee ON roles.id = employee.job_id);',
+    db.query('SELECT employee.id, first_name, last_name, title, dept_name, salary, manager_id FROM ((department JOIN roles ON department.id = roles.department_id) JOIN employee ON roles.id = employee.job_id);',
     function (err, res){
         if(err){
             return err;
@@ -103,6 +108,7 @@ const viewEmployees = () => {
     });
 };
 
+// This function allows us to add a department into the department table
 const addDepartment = () => {
     inquirer.prompt([
         {
@@ -111,6 +117,7 @@ const addDepartment = () => {
             message: 'What is the department name?',
         },
     ])
+    // We just get the department name and then when its added, its given a value that auto increments in the table
     .then(res => {
         db.query(
             'INSERT INTO department (dept_name) VALUES (?)',
@@ -127,6 +134,7 @@ const addDepartment = () => {
     });
 };
 
+// This function allows us to add a job into the roles table
 const addJob = () => {
     inquirer.prompt([
         {
@@ -161,7 +169,9 @@ const addJob = () => {
     });
 };
 
+// This function allows us to add employees to the database
 const addEmployee = () => {
+    // In the prompt we use number for the last two questions instead of a input because they are only allowed to be integers
     inquirer.prompt([
         {
             name: 'first',
@@ -186,6 +196,7 @@ const addEmployee = () => {
     ])
     .then(res => {
         db.query(
+            // We place the response into the employee table with the values needed
             'INSERT INTO employee (first_name, last_name, job_id, manager_id) VALUES (?,?,?,?)',
             [res.first, res.last, res.jobID, res.managerID],
 
@@ -200,6 +211,7 @@ const addEmployee = () => {
     });
 };
 
+// This function allows the user to update a record of a employee
 const updateRecords = () => {
     inquirer.prompt([
         {
@@ -214,6 +226,7 @@ const updateRecords = () => {
         }
     ])
     .then(res => {
+        // When we query we are grabbing a employee's id and setting a new job to them 
         db.query(
             'UPDATE employee SET job_id=? WHERE id=?',
             [res.jobID, res.id],
