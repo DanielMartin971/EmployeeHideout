@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "inquirer": "^9.1.4",
-    "mysql": "^2.18.1"
+    "inquirer": "^8.2.5",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3"
   }
 }
