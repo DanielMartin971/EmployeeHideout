@@ -1,15 +1,16 @@
 const mysql    = require('mysql2');
 const inquirer = require('inquirer');
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    port: '3001',
-    user: 'root',
-    password: 'bB78541254$',
-    database: 'employees_db'
-});
+const db = mysql.createConnection(
+    {
+        host: 'localhost',
+        user: 'root',
+        password: 'bB78541254$',
+        database: 'employees_db'
+    }
+);
 
-connection.connect(err => {
+db.connect(err => {
     if(err){
         throw err;
     }
@@ -51,13 +52,14 @@ const start = () => {
                     updateRecords();
                     break;
             default:
-                connection.end();
+                console.log('Goodbye then!');
+                db.end();
         }
     });
 };
 
 const viewDepartment = () => {
-    connection.query('SELECT * FROM department', function (err, res){
+    db.query('SELECT * FROM department', function (err, res){
         if(err){
             return err;
         }
@@ -67,7 +69,7 @@ const viewDepartment = () => {
 };
 
 const viewJobs = () => {
-    connection.query('SELECT * FROM roles', function (err, res){
+    db.query('SELECT * FROM roles', function (err, res){
         if(err){
             return err;
         }
@@ -77,7 +79,7 @@ const viewJobs = () => {
 };
 
 const viewEmployees = () => {
-    connection.query('SELECT employee.id, first_name, last_name, title, salary, dept_name, manager_id FROM ((department JOIN job ON department.id = job.department_id) JOIN employee ON job.id = employee.job_id);',
+    db.query('SELECT employee.id, first_name, last_name, title, salary, dept_name, manager_id FROM ((department JOIN roles ON department.id = roles.department_id) JOIN employee ON roles.id = employee.job_id);',
     function (err, res){
         if(err){
             return err;
@@ -96,7 +98,7 @@ const addDepartment = () => {
         },
     ])
     .then(res => {
-        connection.query(
+        db.query(
             'INSERT INTO department (dept_name) VALUES (?)',
             [res.department],
             function (err, res){
