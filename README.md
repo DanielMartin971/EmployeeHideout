@@ -1,4 +1,4 @@
-# EmployeeHideout || CMS Challenge
+# EmployeeHideout || CMS Challenge || MySQL
 
 ## Description
 
